@@ -1,5 +1,3 @@
-from constants import *
-
 # Здесь должен быть реализован класс bullet (кружочки со своими соординатами, радиусом, скоростями по осям и цветом)
 # + со своим методом draw (класс можно написать в main)
 # роцедура при вызове которой:
@@ -13,14 +11,16 @@ def distance(x_p, y_p, x_l, y_l, c_l):
     return (abs(x_l * x_p + y_l * y_p + c_l) / (x_l ** 2 + y_l ** 2) ** 0.5)
 
 
-def straight(a, b):
-    '''Return A, B, С from straight line Ax + Bx + С = 0 equation, which includes points a and b'''
-    if a[0] == b[0]:
-        return [1, 0, -a[0]]
-    elif a[1] == b[1]:
-        return [0, 1, -a[1]]
+def straight(first_point, second_point):
+    '''Return A, B, С from straight line Ax + Bx + С = 0 equation, which includes
+    points first_point and second_point'''
+    if first_point[0] == second_point[0]:
+        return [1, 0, -first_point[0]]
+    elif first_point[1] == second_point[1]:
+        return [0, 1, -first_point[1]]
     else:
-        return [b[1] - a[1], a[0] - b[0], a[1] * (b[0] - a[0]) - a[0] * (b[1] - a[1])]
+        return [second_point[1] - first_point[1], first_point[0] - second_point[0], first_point[1] *
+                (second_point[0] - first_point[0]) - first_point[0] * (second_point[1] - first_point[1])]
 
 
 def projection(x_p, y_p, alfa):
@@ -34,29 +34,27 @@ def projection(x_p, y_p, alfa):
         return [x0, - alfa[0] * x0 / alfa[1] - alfa[2] / alfa[1]]
 
 
-def one_crossing(a, b, x_p, y_p, r): #a, b - arrays of 2 elements, which are coordinates of segment's ends
-    '''Return True if segment ab crosses the circle with the center in (x_p, y_p) and radius r, False if not'''
-    t = 0
-    if ((x_p - a[0]) ** 2 + (y_p - a[1]) ** 2) ** 0.5 <= r:
-        t += 1
-    if ((x_p - b[0]) ** 2 + (y_p - b[1]) ** 2) ** 0.5 <= r:
-        t += 1
-    p = projection(x_p, y_p, straight(a, b))
-    if p[0] <= max(a[0], b[0]) and p[0] >= min(a[0], b[0]) and p[1] <= max(a[1], b[1]) and p[1] >= min(a[1], b[1]):
-        t += 1
-    if t == 0:
-        return False
-    else:
+def one_crossing(first_point, second_point, x_p, y_p, r): #first_point, second_point - arrays of 2 elements, which are coordinates of segment's ends
+    '''Return True if segment first_point, second_point crosses the circle with the center in (x_p, y_p)
+    and radius r, False if not'''
+    st = straight(first_point, second_point)
+    if ((x_p - first_point[0]) ** 2 + (y_p - first_point[1]) ** 2) ** 0.5 <= r:
         return True
+    if ((x_p - second_point[0]) ** 2 + (y_p - second_point[1]) ** 2) ** 0.5 <= r:
+        return True
+    p = projection(x_p, y_p, straight(first_point, second_point))
+    if p[0] <= max(first_point[0], second_point[0]) and p[0] >= min(first_point[0], second_point[0]) \
+            and p[1] <= max(first_point[1], second_point[1]) and p[1] >= min(first_point[1], second_point[1]) \
+            and distance(x_p, y_p, st[0], st[1], st[2]) <= r:
+        return True
+    return False
 
 
-def crossing(a, x_p, y_p, r): # a - array of arrays, including both coordinates of every polygon vertex
+def crossing(polygon_vertexes, x_p, y_p, r): # polygon_vertexes - array of arrays, including both coordinates of every polygon vertex
     '''Return true if there are any crossings, no if not'''
-    t = 0
-    for i in range(len(a)):
-        if one_crossing(a[i - 1], a[i], x_p, y_p, r):
-            t += 1
-    if t == 0:
-        return False
-    else:
-        return True
+    for i in range(len(polygon_vertexes)):
+        if one_crossing(polygon_vertexes[i - 1], polygon_vertexes[i], x_p, y_p, r):
+            return True
+    return False
+#def check_hitting(bullet):  # Проверка на попадание снаряда в самолётик, возвращает True или False
+   # pass
