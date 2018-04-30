@@ -21,7 +21,14 @@ plane = pg.transform.smoothscale(plane, (int(pl_w * scaling), int(pl_h * scaling
 plane_dmg = pg.image.load("plane_dmg.png").convert_alpha()
 plane_dmg = pg.transform.smoothscale(plane_dmg, (int(pl_w * scaling), int(pl_h * scaling)))
 
-cloud_0 = pg.image.load("cloud0.png").convert_alpha()  # Подгружаем картинки и изменяем их размер для отрисовки
+rkn = pg.image.load("PKH.png").convert_alpha()  # Снаряды
+rkn = pg.transform.smoothscale(rkn, (int(bull_w * scaling), int(bull_w * scaling)))
+vpn = pg.image.load("VPN.png").convert_alpha()  # Бонус VPN
+vpn = pg.transform.smoothscale(vpn, (int(bonus_w * scaling), int(bonus_w * scaling)))
+extr_l = pg.image.load("life.png").convert_alpha()  # Дополнительная жизнь
+extr_l = pg.transform.smoothscale(extr_l, (int(bonus_w * scaling), int(bonus_w * scaling)))
+
+cloud_0 = pg.image.load("cloud0.png").convert_alpha()  # Подгружаем картинки облаков и изменяем их размер для отрисовки
 cloud_1 = pg.image.load("cloud1.png").convert_alpha()
 cloud_2 = pg.image.load("cloud2.png").convert_alpha()
 cloud_3 = pg.image.load("cloud3.png").convert_alpha()
