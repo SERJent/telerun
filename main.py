@@ -65,8 +65,31 @@ game = False  # Флаг, показывающий, что игрк видит (
 # ----------------------------------------------------------------------------------------------------------------------
 
 
+def fall(dt, y, spdy, ay):
+    y += spdy * dt + ay * dt ** 2 / 2
+    spdy += ay * dt
+    return y, spdy
+
 while not crashed:
     win.fill((255, 255, 255))
+
+    if menu:
+        pg.time.delay(delay)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                crashed = True
+
+        pnt.draw_menu(win, font_small, font_normal, font_huge, logo, best_time)
+        pg.display.update()
+        keys = pg.key.get_pressed()
+
+        if keys[pg.K_RETURN]: # Новая игра
+            pl_x, pl_y, = pl_x0, pl_y0
+            pl_spdx, pl_spdy = pl_spdx0, pl_spdy0
+            pl_lives = pl_lives0
+            menu = False
+            game = True
+            game_time = 0
 
     if game:
         if pl_lives:
@@ -84,21 +107,18 @@ while not crashed:
                 pl_x -= pl_spdx*t
 
             if (not keys[pg.K_DOWN] and not keys[pg.K_UP]) or (keys[pg.K_DOWN] and keys[pg.K_UP]): # Падение
-                pl_y += pl_spdy*t + pl_g*t**2/2
-                pl_spdy += pl_g*t
+                pl_y, pl_spdy = fall(t, pl_y, pl_spdy, pl_g)
 
             else:
                 if keys[pg.K_UP] and (pl_y > brd + pl_h/2):  # Движение вверх
-                    pl_spdy = spd_up
-                    pl_y += pl_spdy * t + pl_g * t ** 2 / 2
-                    pl_spdy += pl_g * t
+                    pl_y, pl_spdy = fall(t, pl_y, spd_up, pl_g)
+
 
                 if pl_y < pl_h/2 + brd:   # Выход за границы по высоте
                     pl_spdy = 0
 
                 if keys[pg.K_DOWN]:  # Движение вниз
-                    pl_y += pl_spdy * t + a_down * t ** 2 / 2
-                    pl_spdy += a_down * t
+                    pl_y, pl_spdy = fall(t, pl_y, pl_spdy, a_down)
 
             pnt.draw_plane(win, pl_x, pl_y, plane, plane_dmg, vulnerable)
             # check_lives(y, pl_spdy, lives, vulnerable, bullets) Где-то здесь нужно проверить жизни
@@ -133,22 +153,6 @@ while not crashed:
             game_over = False
             menu = True
 
-    if menu:
-        pg.time.delay(delay)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                crashed = True
 
-        pnt.draw_menu(win, font_small, font_normal, font_huge, logo, best_time)
-        pg.display.update()
-        keys = pg.key.get_pressed()
-
-        if keys[pg.K_RETURN]: # Новая игра
-            pl_x, pl_y, = pl_x0, pl_y0
-            pl_spdx, pl_spdy = pl_spdx0, pl_spdy0
-            pl_lives = pl_lives0
-            menu = False
-            game = True
-            game_time = 0
 pg.quit()  # Завершение программы
 quit()
