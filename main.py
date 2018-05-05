@@ -41,8 +41,13 @@ cloud3 = pg.transform.smoothscale(cloud_3, (cld_w, cld_h))
 clouds_img = [cloud0, cloud1, cloud2, cloud3]  # Массив всех возможных форм облачков
 clouds = []  # Массив облачков, которые на экране уже бегут
 
-pl_spdx = spd  # Текущие скорости самолётика по осям
-pl_spdy = 0
+pl_spdx0 = spd
+pl_spdy0 = 0
+pl_spdx = pl_spdx0  # Текущие скорости самолётика по осям
+pl_spdy = pl_spdy0
+
+pl_lives0 = 5
+pl_lives = pl_lives0
 
 pl_x = midle_x  # Текущие координаты самолётика
 pl_y = midle_y
@@ -61,19 +66,89 @@ game = False  # Флаг, показывающий, что игрк видит (
 
 
 while not crashed:
-    """Основной цикл, внутри которого должна быть написана обработка клавиш и порядок отрисовки для каждого из окон:
-    'MENU'
-    'GAME'
-    'GAME OVER' 
-    Также именно тут должен быть реализован счетчик времени и сохранение лучшего результата!"""
     win.fill((255, 255, 255))
 
-    pg.time.delay(delay)
-    for event in pg.event.get():  # Проверка на выход из игры
-        if event.type == pg.QUIT:
-            crashed = True
+    if game:
+        if pl_lives:
+            pg.time.delay(delay)
+            for event in pg.event.get():  # Проверка на выход из игры
+                if event.type == pg.QUIT:
+                    crashed = True
 
-    pg.display.flip()  # Перерисовка всего экрана
+            keys = pg.key.get_pressed()
 
+            if keys[pg.K_RIGHT] and (win_w - pl_x >= pl_w + brd):
+                pl_x += pl_spdx*t
+
+            if keys[pg.K_LEFT] and (pl_x >= brd) :
+                pl_x -= pl_spdx*t
+
+            if (not keys[pg.K_DOWN] and not keys[pg.K_UP]) or (keys[pg.K_DOWN] and keys[pg.K_UP]): # Падение
+                pl_y += pl_spdy*t + pl_g*t**2/2
+                pl_spdy += pl_g*t
+
+            else:
+                if keys[pg.K_UP] and (pl_y > brd + pl_h/2):  # Движение вверх
+                    pl_spdy = spd_up
+                    pl_y += pl_spdy * t + pl_g * t ** 2 / 2
+                    pl_spdy += pl_g * t
+
+                if pl_y < pl_h/2 + brd:   # Выход за границы по высоте
+                    pl_spdy = 0
+
+                if keys[pg.K_DOWN]:  # Движение вниз
+                    pl_y += pl_spdy * t + a_down * t ** 2 / 2
+                    pl_spdy += a_down * t
+
+            pnt.draw_plane(win, pl_x, pl_y, plane, plane_dmg, vulnerable)
+            # check_lives(y, pl_spdy, lives, vulnerable, bullets) Где-то здесь нужно проверить жизни
+            pg.display.update()  # Перерисовка всего экрана
+
+        else:
+          game = False
+          game_over = True
+          #if game_time > best_time:
+             #best_time = game_time
+
+    if game_over:
+        pg.time.delay(delay)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                crashed = True
+
+        pnt.draw_go(win, font_small, font_normal, font_huge, game_time, best_time)
+        pg.display.update()
+
+        keys = pg.key.get_pressed()
+
+        if keys[pg.K_RETURN]:  # Новая игра
+            pl_x, pl_y, = pl_x0, pl_y0
+            pl_spdx, pl_spdy = pl_spdx0, pl_spdy0
+            pl_lives = pl_lives0
+            game_over = False
+            game = True
+            game_time = 0
+
+        if keys [pg.K_BACKSPACE]:  # Выход в меню
+            game_over = False
+            menu = True
+
+    if menu:
+        pg.time.delay(delay)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                crashed = True
+
+        pnt.draw_menu(win, font_small, font_normal, font_huge, logo, best_time)
+        pg.display.update()
+        keys = pg.key.get_pressed()
+
+        if keys[pg.K_RETURN]: # Новая игра
+            pl_x, pl_y, = pl_x0, pl_y0
+            pl_spdx, pl_spdy = pl_spdx0, pl_spdy0
+            pl_lives = pl_lives0
+            menu = False
+            game = True
+            game_time = 0
 pg.quit()  # Завершение программы
 quit()
