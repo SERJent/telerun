@@ -124,9 +124,10 @@ while not crashed:
 
             game_time += clock.get_time() / 1000  # Обновление игрового времени
             pnt.print_time(win, font_small, game_time)  # Вывод времени на экран
-
+            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable,bullets, polygon)
+            pnt.lives_counter(win, font_normal, pl_lives)  # Рисуем счётчик жизней
             pnt.draw_plane(win, pl_x, pl_y, plane, plane_dmg, vulnerable)
-            # check_lives(y, pl_spdy, lives, vulnerable, bullets) Где-то здесь нужно проверить жизни
+
             pg.display.update()  # Перерисовка всего экрана
 
         else:
@@ -140,7 +141,6 @@ while not crashed:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 crashed = True
-
         pnt.draw_go(win, font_small, font_normal, font_huge, game_time, best_time)  # Отрисовка game_over
         pg.display.update()
 

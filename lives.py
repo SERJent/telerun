@@ -11,20 +11,25 @@
     lives - переменная, отвечающая за количество жизней
     vulnerable - флаг, показывающий является ли цель уязвимой в данный момент
     bullets - массив объектов  типа bullets (пули, которые в данный момент отрисовываются на экране)"""
-from const import *
+from constants import *
 import bullets
 
-
-def check_lives(bullets_fb,bullets_or,polygon,y,lives):
-    if y > (win_h - brd):
+def check_lives(y ,pl_spdy ,lives,vulnerable,bullets,polygon):
+    if y > (win_h - brd) and vulnerable:
         pl_spdy = -rescue_spd
         lives = lives - 1
-    for bull in bullets_fb:
-        if bullets.crossing(polygon, bull.x, bull.y, bull.rad):
+        vulnerable = False
+    for bull in bullets:
+        if bullets.crossing(polygon, bull.x, bull.y, bull.rad) and vulnerable:
             lives = lives - 1
-            del bullets_fb[bullets_fb.index(bull)]
-    for bull in bullets_or:
-        if bullets.crossing(polygon, bull.x, bull.y, bull.rad):
-            lives = lives - 1
-            del bullets_or[bullets_or.index(bull)]
-    return pl_spdy, lives
+            del bullets[bullets.index(bull)]
+            vulnerable = False
+    if not vulnerable:
+        if y >= win_h:
+            pl_spdy = -rescue_spd
+        t_vul += t_add
+        if t_vul >= invulnerability_t:
+            vulnerable = True
+            t_vul = 0
+
+    return pl_spdy, lives , vulnerable
