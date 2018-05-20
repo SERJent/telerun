@@ -16,7 +16,7 @@ class cloud:
 
 def clouds_init(clouds, clouds_img):#создаёт начальный массив из облаков
     for i in range(cld_n):
-        clouds.append(cloud(random.uniform(0, win_w), random.randrange(0, win_h), random.randrange(cld_v-1, cld_v+1), clouds_img[random.randint(0, 3)]))
+        clouds.append(cloud(random.randrange(0, win_w, win_w/10), random.randrange(0, win_h, win_h/10), random.randrange(cld_v-1, cld_v+1), clouds_img[random.randint(0, 3)]))
 
 def clouds_run(win, clouds, clouds_img):#создает новые облака со случайной координатой и удаляет старые, отрисовываея всё на экране
     for cl in clouds:
@@ -24,7 +24,7 @@ def clouds_run(win, clouds, clouds_img):#создает новые облака 
             cl.shift()
         else:
             del clouds[clouds.index(cl)]
-            clouds.append(cloud(win_w, random.uniform(0, win_h), random.randrange(cld_v-1, cld_v+1), clouds_img[random.randint(0, 3)]))
+            clouds.append(cloud(win_w, random.randrange(0, win_h, win_h/10), random.randrange(cld_v-1, cld_v+1), clouds_img[random.randint(0, 3)]))
     for cld in clouds:
         cld.draw(win)
 
