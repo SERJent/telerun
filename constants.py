@@ -37,4 +37,5 @@ cld_w = int(196 * scaling)
 cld_h = int(127 * scaling)
 shift = int(0.3 * cld_h)
 
+cld_n = 6 #Количество облаков
 cld_v = 4 * scaling  # Скорость движения облаков, с ней можно играться
