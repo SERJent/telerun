@@ -3,6 +3,7 @@ import random
 
 bullet_array = []
 
+
 class bullet():
     def __init__(self, x, y, v_x, v_y, rad, picture):
         self.x = x
@@ -16,7 +17,7 @@ class bullet():
         win.blit(self.picture, (self.x - bull_w / 2, self.y - bull_w / 2))
 
 
-def bullet_generator(win, x, y, bullet_picture): #рисует новые пули при необходимости и двигает старые
+def bullet_generator(win, x, y, bullet_picture):  # рисует новые пули при необходимости и двигает старые
     global bullet_array
     edge = bull_w / 2
     for shot in bullet_array:
@@ -46,7 +47,7 @@ def bullet_generator(win, x, y, bullet_picture): #рисует новые пул
 
 def distance(x_p, y_p, x_l, y_l, c_l):
     '''Return the distance between the point (x_p, y_p) and the line x_l * x + y_l * y + c_l = 0'''
-    return (abs(x_l * x_p + y_l * y_p + c_l) / (x_l ** 2 + y_l ** 2) ** 0.5)
+    return abs(x_l * x_p + y_l * y_p + c_l) / (x_l ** 2 + y_l ** 2) ** 0.5
 
 
 def straight(first_point, second_point):
@@ -72,7 +73,8 @@ def projection(x_p, y_p, alfa):
         return [x0, - alfa[0] * x0 / alfa[1] - alfa[2] / alfa[1]]
 
 
-def one_crossing(first_point, second_point, x_p, y_p, r): #first_point, second_point - arrays of 2 elements, which are coordinates of segment's ends
+def one_crossing(first_point, second_point, x_p, y_p, r):
+    # first_point, second_point - arrays of 2 elements, which are coordinates of segment's ends
     '''Return True if segment first_point, second_point crosses the circle with the center in (x_p, y_p)
     and radius r, False if not'''
     st = straight(first_point, second_point)
@@ -88,7 +90,8 @@ def one_crossing(first_point, second_point, x_p, y_p, r): #first_point, second_p
     return False
 
 
-def crossing(polygon_vertexes, x_p, y_p, r): # polygon_vertexes - array of arrays, including both coordinates of every polygon vertex
+def crossing(polygon_vertexes, x_p, y_p, r):
+    # polygon_vertexes - array of arrays, including both coordinates of every polygon vertex
     '''Return true if there are any crossings, no if not'''
     for i in range(len(polygon_vertexes)):
         if one_crossing(polygon_vertexes[i - 1], polygon_vertexes[i], x_p, y_p, r):
