@@ -1,5 +1,3 @@
-
-
 # Внутри этой процедуры можно использовать процедуру (даже если она ещё не написана) из bullets.py,
 # которая принимает в качестве аргумента объект типа bullet и возвращает True или False в зав-ти
 # от того попала пуля в самолётик или же нет.
@@ -13,8 +11,8 @@
     bullets - массив объектов  типа bullets (пули, которые в данный момент отрисовываются на экране)"""
 from constants import *
 import bullets
-
-def check_lives(y ,pl_spdy ,lives,vulnerable,bullets,polygon):
+def check_lives(y ,pl_spdy ,lives,vulnerable,bullets, polygon):
+    global t_vul
     if y > (win_h - brd) and vulnerable:
         pl_spdy = -rescue_spd
         lives = lives - 1
@@ -33,3 +31,4 @@ def check_lives(y ,pl_spdy ,lives,vulnerable,bullets,polygon):
             t_vul = 0
 
     return pl_spdy, lives , vulnerable
+
