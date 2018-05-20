@@ -40,6 +40,7 @@ cloud3 = pg.transform.smoothscale(cloud_3, (cld_w, cld_h))
 
 clouds_img = [cloud0, cloud1, cloud2, cloud3]  # Массив всех возможных форм облачков
 clouds = []  # Массив облачков, которые на экране уже бегут
+cl.clouds_init(clouds, clouds_img) #Расставляем облачка в старотовое положение
 
 pl_spdx0 = spd
 pl_spdy0 = 0
@@ -73,6 +74,7 @@ def fall(dt, y, spdy, ay):  # Процедура, просчитывающая �
 
 while not crashed:
     win.fill((255, 255, 255))
+    cl.clouds_run(win, clouds, clouds_img)
 
     if menu:
         pg.time.delay(delay)
