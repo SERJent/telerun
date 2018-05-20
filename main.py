@@ -3,6 +3,8 @@ from constants import *
 import painting as pnt
 import clouds as cl
 import lives as liv
+import bullets as bul
+
 
 pg.init()
 win = pg.display.set_mode((win_w, win_h))  # Создание самого экрана для отрисовки
@@ -40,7 +42,6 @@ cloud3 = pg.transform.smoothscale(cloud_3, (cld_w, cld_h))
 
 clouds_img = [cloud0, cloud1, cloud2, cloud3]  # Массив всех возможных форм облачков
 clouds = []  # Массив облачков, которые на экране уже бегут
-cl.clouds_init(clouds, clouds_img) #Расставляем облачка в старотовое положение
 
 pl_spdx0 = spd
 pl_spdy0 = 0
@@ -74,8 +75,6 @@ def fall(dt, y, spdy, ay):  # Процедура, просчитывающая �
 
 while not crashed:
     win.fill((255, 255, 255))
-    cl.clouds_run(win, clouds, clouds_img)
-
     if menu:
         pg.time.delay(delay)
         for event in pg.event.get():
@@ -127,9 +126,10 @@ while not crashed:
                 if keys[pg.K_DOWN]:  # Движение вниз
                     pl_y, pl_spdy = fall(t, pl_y, pl_spdy, a_down)
 
+            bul.bullet_generator(win, pl_x + pl_w / 2, pl_y + pl_h / 2, rkn)
             game_time += clock.get_time() / 1000  # Обновление игрового времени
             pnt.print_time(win, font_small, game_time)  # Вывод времени на экран
-            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable,bullets,polygon)
+            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable, bul.bullet_generator, polygon)
             pnt.lives_counter(win, font_normal, pl_lives)  # Прорисовка счетчика жизней
             pnt.draw_plane(win, pl_x, pl_y, plane, plane_dmg, vulnerable)
             pg.display.update()  # Перерисовка всего экрана
@@ -144,6 +144,7 @@ while not crashed:
                            [pl_x + 0.21 * pl_w, pl_y + 0.75 * pl_h], [pl_x, pl_y + 0.85 * pl_h]]
 
     if game_over:
+        bul.bullet_array = []
         pg.time.delay(delay)
         for event in pg.event.get():
             if event.type == pg.QUIT:

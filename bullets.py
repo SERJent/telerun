@@ -1,10 +1,48 @@
-# Здесь должен быть реализован класс bullet (кружочки со своими соординатами, радиусом, скоростями по осям и цветом)
-# + со своим методом draw (класс можно написать в main)
-# роцедура при вызове которой:
-# в массиве bullets создается новый объект типа bullet (в случайном месте за экраном,
-# летящая по направлению к самолётику)
+from constants import *
+import random
 
-#Первый залив функции про пересечение многоугольника и снаряда, свисите Руслаше Г. если что поправить
+bullet_array = []
+
+class bullet():
+    def __init__(self, x, y, v_x, v_y, rad, picture):
+        self.x = x
+        self.y = y
+        self.v_x = v_x
+        self.v_y = v_y
+        self.rad = rad
+        self.picture = picture
+
+    def draw(self, win):
+        win.blit(self.picture, (self.x - bull_w / 2, self.y - bull_w / 2))
+
+
+def bullet_generator(win, x, y, bullet_picture): #рисует новые пули при необходимости и двигает старые
+    global bullet_array
+    edge = bull_w / 2
+    for shot in bullet_array:
+        if (shot.x < -edge) or (shot.x > win_w + edge) or (shot.y < -edge):
+            del(shot)
+        else:
+            shot.x = shot.x + shot.v_x
+            shot.y = shot.y + shot.v_y
+
+    if len(bullet_array) == 0:
+        new_born_x = random.randrange(0, win_w, 5)
+        new_born_y = win_h + bull_w / 2
+        new_born_v_x = bullet_speed * (x - new_born_x) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
+        new_born_v_y = bullet_speed * (y - new_born_y) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
+        bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w, bullet_picture))
+    else:
+        if bullet_array[-1].y <= win_h - 2 * bull_w:
+            new_born_x = random.randrange(0, win_w, 5)
+            new_born_y = win_h + bull_w / 2
+            new_born_v_x = bullet_speed * (x - new_born_x) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
+            new_born_v_y = bullet_speed * (y - new_born_y) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
+            bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w, bullet_picture))
+
+    for shot in bullet_array:
+        shot.draw(win)
+
 
 def distance(x_p, y_p, x_l, y_l, c_l):
     '''Return the distance between the point (x_p, y_p) and the line x_l * x + y_l * y + c_l = 0'''
@@ -56,5 +94,5 @@ def crossing(polygon_vertexes, x_p, y_p, r): # polygon_vertexes - array of array
         if one_crossing(polygon_vertexes[i - 1], polygon_vertexes[i], x_p, y_p, r):
             return True
     return False
-#def check_hitting(bullet):  # Проверка на попадание снаряда в самолётик, возвращает True или False
-   # pass
+
+

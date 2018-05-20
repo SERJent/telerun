@@ -10,17 +10,17 @@
     vulnerable - флаг, показывающий является ли цель уязвимой в данный момент
     bullets - массив объектов  типа bullets (пули, которые в данный момент отрисовываются на экране)"""
 from constants import *
-import bullets
+import bullets as bul
 def check_lives(y ,pl_spdy ,lives,vulnerable,bullets, polygon):
     global t_vul
     if y > (win_h - brd) and vulnerable:
         pl_spdy = -rescue_spd
         lives = lives - 1
         vulnerable = False
-    for bull in bullets:
-        if bullets.crossing(polygon, bull.x, bull.y, bull.rad) and vulnerable:
+    for bull in bul.bullet_array:
+        if bul.crossing(polygon, bull.x, bull.y, bull.rad) and vulnerable:
             lives = lives - 1
-            del bullets[bullets.index(bull)]
+            del bul.bullet_array[bul.bullet_array.index(bull)]
             vulnerable = False
     if not vulnerable:
         if y >= win_h:
