@@ -2,9 +2,11 @@ from constants import *
 import random
 
 bullet_array = []
+speed_counter = 0  # Constant for changing the bullet speed
 
 
 class bullet():
+    '''An object, which has several parameters and can bw drawn'''
     def __init__(self, x, y, v_x, v_y, rad, picture):
         self.x = x
         self.y = y
@@ -17,9 +19,12 @@ class bullet():
         win.blit(self.picture, (self.x - bull_w / 2, self.y - bull_w / 2))
 
 
-def bullet_generator(win, x, y, bullet_picture):  # рисует новые пули при необходимости и двигает старые
+def bullet_generator(win, x, y, bullet_picture):
+    '''Draws bullets in there current position and draws new ones in necessary'''
     global bullet_array
+    global speed_counter
     edge = bull_w / 2
+
     for shot in bullet_array:
         if (shot.x < -edge) or (shot.x > win_w + edge) or (shot.y < -edge):
             del(shot)
@@ -27,19 +32,24 @@ def bullet_generator(win, x, y, bullet_picture):  # рисует новые пу
             shot.x = shot.x + shot.v_x
             shot.y = shot.y + shot.v_y
 
+    if speed_counter < 3000:
+        bullet_speed = bullet_speed_init + bullet_speed_init * (speed_counter // 500)
+    else:
+        bullet_speed = bullet_speed_init * 7
+
     if len(bullet_array) == 0:
         new_born_x = random.randrange(0, win_w, 5)
         new_born_y = win_h + bull_w / 2
         new_born_v_x = bullet_speed * (x - new_born_x) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
         new_born_v_y = bullet_speed * (y - new_born_y) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
-        bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w, bullet_picture))
+        bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w / 2, bullet_picture))
     else:
         if bullet_array[-1].y <= win_h - 2 * bull_w:
             new_born_x = random.randrange(0, win_w, 5)
             new_born_y = win_h + bull_w / 2
             new_born_v_x = bullet_speed * (x - new_born_x) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
             new_born_v_y = bullet_speed * (y - new_born_y) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
-            bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w, bullet_picture))
+            bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w / 2, bullet_picture))
 
     for shot in bullet_array:
         shot.draw(win)

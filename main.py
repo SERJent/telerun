@@ -77,6 +77,7 @@ cl.clouds_init(clouds, clouds_img)
 while not crashed:
     win.fill((255, 255, 255))
     cl.clouds_run(win, clouds, clouds_img)
+    bul.speed_counter += 1
 
     if menu:
         pg.time.delay(delay)
