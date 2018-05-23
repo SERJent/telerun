@@ -48,7 +48,7 @@ pl_spdy0 = 0
 pl_spdx = pl_spdx0  # Текущие скорости самолётика по осям
 pl_spdy = pl_spdy0
 
-pl_lives0 = 5
+pl_lives0 = 3
 pl_lives = pl_lives0
 
 pl_x = midle_x  # Текущие координаты самолётика
@@ -73,8 +73,11 @@ def fall(dt, y, spdy, ay):  # Процедура, просчитывающая �
     return y, spdy
 
 
+cl.clouds_init(clouds, clouds_img)
 while not crashed:
     win.fill((255, 255, 255))
+    cl.clouds_run(win, clouds, clouds_img)
+
     if menu:
         pg.time.delay(delay)
         for event in pg.event.get():
@@ -97,9 +100,7 @@ while not crashed:
     if game:
         if pl_lives:
             clock.tick()
-            polygon = [[pl_x + 0.21 * pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.19 * pl_w, pl_y],
-                             [pl_x + pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.21 * pl_w, pl_y + pl_h],
-                             [pl_x + 0.21 * pl_w, pl_y + 0.75 * pl_h], [pl_x, pl_y + 0.85 * pl_h]]
+
             pg.time.delay(delay)
             for event in pg.event.get():  # Проверка на выход из игры
                 if event.type == pg.QUIT:
@@ -126,22 +127,23 @@ while not crashed:
                 if keys[pg.K_DOWN]:  # Движение вниз
                     pl_y, pl_spdy = fall(t, pl_y, pl_spdy, a_down)
 
+            polygon = [[pl_x + 0.21 * pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.19 * pl_w, pl_y],
+                             [pl_x + pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.21 * pl_w, pl_y + pl_h],
+                             [pl_x + 0.21 * pl_w, pl_y + 0.75 * pl_h], [pl_x, pl_y + 0.85 * pl_h]]
             bul.bullet_generator(win, pl_x + pl_w / 2, pl_y + pl_h / 2, rkn)
             game_time += clock.get_time() / 1000  # Обновление игрового времени
             pnt.print_time(win, font_small, game_time)  # Вывод времени на экран
-            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable, bul.bullet_generator, polygon)
+            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable,
+                                                            bul.bullet_generator, polygon)
             pnt.lives_counter(win, font_normal, pl_lives)  # Прорисовка счетчика жизней
             pnt.draw_plane(win, pl_x, pl_y, plane, plane_dmg, vulnerable)
             pg.display.update()  # Перерисовка всего экрана
 
         else:
-          game = False
-          game_over = True
-          if game_time > best_time:  # Сохранение лучшего времени
-             best_time = game_time
-          polygon = [[pl_x + 0.21 * pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.19 * pl_w, pl_y],
-                           [pl_x + pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.21 * pl_w, pl_y + pl_h],
-                           [pl_x + 0.21 * pl_w, pl_y + 0.75 * pl_h], [pl_x, pl_y + 0.85 * pl_h]]
+            game = False
+            game_over = True
+            if game_time > best_time:  # Сохранение лучшего времени
+                best_time = game_time
 
     if game_over:
         bul.bullet_array = []
