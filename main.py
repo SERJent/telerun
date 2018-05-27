@@ -60,6 +60,8 @@ vulnerable = True  # Флаг, показывающий является ли ц
 game_time = 0  # Счётчик текущего времени игры
 best_time = 0  # Тут храниться лучшее время за сессию
 
+counter_cloud = cld_border_shift
+
 # Всякие флаги ---------------------------------------------------------------------------------------------------------
 crashed = False  # Флаг для проверки закрывания программы
 menu = True  # Флаг, показывающий, что игрк находится (не находится) в меню
@@ -72,7 +74,6 @@ def fall(dt, y, spdy, ay):  # Процедура, просчитывающая �
     y += spdy * dt + ay * dt ** 2 / 2
     spdy += ay * dt
     return y, spdy
-
 
 
 while not crashed:
@@ -124,7 +125,7 @@ while not crashed:
                 pl_y, pl_spdy = fall(t, pl_y, pl_spdy, pl_g)
 
             else:
-                if keys[pg.K_UP] and (pl_y > brd + pl_h/2):  # Движение вверх
+                if keys[pg.K_UP] and (pl_y > brd):  # Движение вверх
                     pl_y, pl_spdy = fall(t, pl_y, spd_up, pl_g)
 
                 if pl_y < pl_h/2 + brd:   # Выход за границы по высоте
@@ -132,18 +133,22 @@ while not crashed:
 
                 if keys[pg.K_DOWN]:  # Движение вниз
                     pl_y, pl_spdy = fall(t, pl_y, pl_spdy, a_down)
+            if pl_y <= brd:  # Ограничение сверху
+                pl_y = brd
 
             polygon = [[pl_x + 0.21 * pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.19 * pl_w, pl_y],
                              [pl_x + pl_w, pl_y + 0.32 * pl_h], [pl_x + 0.21 * pl_w, pl_y + pl_h],
                              [pl_x + 0.21 * pl_w, pl_y + 0.75 * pl_h], [pl_x, pl_y + 0.85 * pl_h]]
             bul.bullet_generator(win, pl_x + pl_w / 2, pl_y + pl_h / 2, rkn)
+
             game_time += clock.get_time() / 1000  # Обновление игрового времени
             pnt.print_time(win, font_small, game_time)  # Вывод времени на экран
-            pl_lives, vulnerable = liv.check_bonuses(pl_lives, bon.bonus_generation, vulnerable, polygon)
-            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable,
-                                                            bul.bullet_generator, polygon)
-            bon.bonus_generation(win, pl_x + pl_w / 2, pl_y + pl_h / 2, extr_l)
+
+            pl_lives, vulnerable = liv.check_bonuses(pl_lives, vulnerable, polygon)
+            pl_spdy, pl_lives, vulnerable = liv.check_lives(pl_y, pl_spdy, pl_lives, vulnerable, polygon)
+            bon.bonus_generation(win, game_time, extr_l)
             pnt.lives_counter(win, font_normal, pl_lives)  # Прорисовка счетчика жизней
+
             pnt.draw_plane(win, pl_x, pl_y, plane, plane_dmg, vulnerable)
             pg.display.update()  # Перерисовка всего экрана
 
