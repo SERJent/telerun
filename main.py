@@ -73,10 +73,14 @@ def fall(dt, y, spdy, ay):  # Процедура, просчитывающая �
     return y, spdy
 
 
-cl.clouds_init(clouds, clouds_img)
+
 while not crashed:
     win.fill((255, 255, 255))
-    cl.clouds_run(win, clouds, clouds_img)
+    if cl.clouds_run(win, clouds, clouds_img, counter_cloud):
+        counter_cloud = 0
+    else:
+        counter_cloud += 1
+        
     bul.speed_counter += 1
 
     if menu:
