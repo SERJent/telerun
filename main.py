@@ -77,6 +77,7 @@ cl.clouds_init(clouds, clouds_img)
 while not crashed:
     win.fill((255, 255, 255))
     cl.clouds_run(win, clouds, clouds_img)
+    bul.speed_counter += 1
 
     if menu:
         pg.time.delay(delay)
@@ -146,6 +147,7 @@ while not crashed:
                 best_time = game_time
 
     if game_over:
+        bul.speed_counter = 0
         bul.bullet_array = []
         pg.time.delay(delay)
         for event in pg.event.get():
