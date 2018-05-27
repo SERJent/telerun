@@ -11,6 +11,7 @@
     bullets - массив объектов  типа bullets (пули, которые в данный момент отрисовываются на экране)"""
 from constants import *
 import bullets as bul
+import bonuses as bon
 def check_lives(y ,pl_spdy ,lives,vulnerable,bullets, polygon):
     global t_vul
     if y > (win_h - brd) and vulnerable:
@@ -31,4 +32,14 @@ def check_lives(y ,pl_spdy ,lives,vulnerable,bullets, polygon):
             t_vul = 0
 
     return pl_spdy, lives , vulnerable
+
+
+def check_bonuses(lives, bonuses, vulnerable, polygon):
+    ''''''
+    for bonus in bon.list_of_bonuses:
+        if bul.crossing(polygon, bonus.x, bonus.y, bonus.rad) and vulnerable:
+            lives = lives + 1
+            del bon.list_of_bonuses[bon.list_of_bonuses.index(bonus)]
+            vulnerable = True
+    return lives, vulnerable
 
