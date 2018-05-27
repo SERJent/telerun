@@ -27,7 +27,7 @@ def bullet_generator(win, x, y, bullet_picture):
 
     for shot in bullet_array:
         if (shot.x < -edge) or (shot.x > win_w + edge) or (shot.y < -edge):
-            del(shot)
+            del bullet_array[bullet_array.index(shot)]
         else:
             shot.x = shot.x + shot.v_x
             shot.y = shot.y + shot.v_y
@@ -44,7 +44,7 @@ def bullet_generator(win, x, y, bullet_picture):
         new_born_v_y = bullet_speed * (y - new_born_y) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5
         bullet_array.append(bullet(new_born_x, new_born_y, new_born_v_x, new_born_v_y, bull_w / 2, bullet_picture))
     else:
-        if bullet_array[-1].y <= win_h - 2 * bull_w:
+        if bullet_array[-1].y <= win_h - 3 * bull_w:
             new_born_x = random.randrange(0, win_w, 5)
             new_born_y = win_h + bull_w / 2
             new_born_v_x = bullet_speed * (x - new_born_x) / ((x - new_born_x) ** 2 + (y - new_born_y) ** 2) ** 0.5

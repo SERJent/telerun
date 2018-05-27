@@ -147,6 +147,7 @@ while not crashed:
                 best_time = game_time
 
     if game_over:
+        bul.speed_counter = 0
         bul.bullet_array = []
         pg.time.delay(delay)
         for event in pg.event.get():
