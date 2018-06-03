@@ -5,7 +5,6 @@ import clouds as cl
 import lives as liv
 import bullets as bul
 import bonuses as bon
-import unittest
 
 pg.init()
 win = pg.display.set_mode((win_w, win_h))  # Создание самого экрана для отрисовки
@@ -185,33 +184,6 @@ while not crashed:
 
 
 pg.quit()  # Завершение программы
-class TestList(unittest.TestCase):
-
-    def test_distance(self):
-        self.assertEqual(bul.distance(-2, 0, 2, -1, 4), 0)
-
-    def test_projection(self):
-        self.assertEqual(bul.projection(-2, 0, [-2, 1, -4]), [-2, 0])
-
-    def test_crossing(self):
-        self.assertEqual(bul.crossing([[0, 0], [0, 3], [3, 3], [3, 0]], 2, 2, 1), True)
-        self.assertEqual(bul.crossing([[0, 0], [0, 3], [3, 3], [3, 0]], 2, 2, 0.5), False)
-
-unittest.main()
-
 quit()
 
-
-
-class TestList(unittest.TestCase):
-
-    def test_distance(self):
-        self.assertEqual(bul.distance(-2, 0, 2, -1, 4), 0)
-
-    def test_projection(self):
-        self.assertEqual(bul.projection(-2, 0, [-2, 1, -4]), [-2, 0])
-
-    def test_crossing(self):
-        self.assertEqual(crossing([[0, 0], [0, 3], [3, 3], [3, 0]], 2, 2, 1), True)
-        self.assertEqual(crossing([[0, 0], [0, 3], [3, 3], [3, 0]], 2, 2, 0.5), False)
 
