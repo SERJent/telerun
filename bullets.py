@@ -1,6 +1,7 @@
 from constants import *
 import random
 
+
 bullet_array = []
 speed_counter = 0  # Constant for changing the bullet speed
 
@@ -107,5 +108,6 @@ def crossing(polygon_vertexes, x_p, y_p, r):
         if one_crossing(polygon_vertexes[i - 1], polygon_vertexes[i], x_p, y_p, r):
             return True
     return False
+
 
 
