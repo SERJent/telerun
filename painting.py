@@ -3,11 +3,11 @@ from constants import *
 
 def draw_menu(win, font_small, font_normal, font_huge, logo, best_time):
     """Процедура, при вызове которой отрисовывается экран 'MENU'
-    Аргументы:
-    win - окно отрисовки
-    font_small, font_normal, font_hugу - соотв. шрифты из main
-    logo - файл logo.png
-    best_time - лучшее время за сессию"""
+            Аргументы:
+            win - окно отрисовки
+            font_small, font_normal, font_hugу - соотв. шрифты из main
+            logo - файл logo.png
+            best_time - лучшее время за сессию"""
     telerun_txt = font_huge.render('TELERUN', True, (0, 137, 204))
     win.blit(telerun_txt, [0.46 * win_w, 0.3 * win_h])
 
@@ -22,11 +22,11 @@ def draw_menu(win, font_small, font_normal, font_huge, logo, best_time):
 
 def draw_go(win, font_small, font_normal, font_huge, game_time, best_time):
     """Процедура, при вызове которой отрисовывается экран 'GAME OVER'
-    Аргументы:
-    win - окно отрисовки
-    font_small, font_normal, font_hugу - соотв. шрифты из main
-    game_time - время завершенной игры
-    best_time - лучшее время за сессию"""
+            Аргументы:
+            win - окно отрисовки
+            font_small, font_normal, font_hugу - соотв. шрифты из main
+            game_time - время завершенной игры
+            best_time - лучшее время за сессию"""
     go_txt = font_huge.render('GAME OVER', True, (0, 137, 204))
     go_rec = go_txt.get_rect()
     go_rec.center = (win_w / 2, win_h / 3)
@@ -51,15 +51,37 @@ def draw_go(win, font_small, font_normal, font_huge, game_time, best_time):
     win.blit(back_txt, back_rec)
 
 
+def draw_pause(win, font_small, font_normal, font_huge, game_time):
+    """Процедура, при вызове которой отрисовывается экран 'PAUSE'
+            Аргументы:
+            win - окно отрисовки
+            font_small, font_normal, font_hugу - соотв. шрифты из main
+            game_time - время завершенной игры"""
+    go_txt = font_huge.render('PAUSE', True, (0, 137, 204))
+    go_rec = go_txt.get_rect()
+    go_rec.center = (win_w / 2, win_h / 3)
+    win.blit(go_txt, go_rec)
+
+    yres_txt = font_normal.render('YOUR TIME: ' + str(round(game_time, 1)) + 'S', True, (0, 137, 204))
+    yres_rec = yres_txt.get_rect()
+    yres_rec.center = (win_w / 2, win_h / 3 + 100 * scaling)
+    win.blit(yres_txt, yres_rec)
+
+    res_txt = font_small.render('RESUME: SPACE', True, (0, 137, 204))
+    res_rec = res_txt.get_rect()
+    res_rec.center = (win_w / 2, 2 * win_h / 3 + 50 * scaling)
+    win.blit(res_txt, res_rec)
+
+
 def draw_plane(win, x, y, plane, plane_dmg, vulnerable):
     """Процедура, при вызове которой отрисовывается самолётик
-    Аргументы:
-    win - окно отрисовки
-    x - координата самолётика по оси Х (верхний левый угол)
-    y - координата самолётика по оси Y (верхний левый угол)
-    plane - файл plane.png (обычный самолётик)
-    plane_png - файл plane_dmg.png (самолётик после ранения)
-    vulnerable - флаг, говорящий о том уязвим самолётик или нет"""
+            Аргументы:
+            win - окно отрисовки
+            x - координата самолётика по оси Х (верхний левый угол)
+            y - координата самолётика по оси Y (верхний левый угол)
+            plane - файл plane.png (обычный самолётик)
+            plane_png - файл plane_dmg.png (самолётик после ранения)
+            vulnerable - флаг, говорящий о том уязвим самолётик или нет"""
     # Многоугольник, задающий самолётик. Будет нужен в
     # pg.draw.polygon(win, (0, 0, 0),
     #                 [(x + 0.21 * pl_w, y + 0.32 * pl_h), (x + 0.19 * pl_w, y), (x + pl_w, y + 0.32 * pl_h),
@@ -72,10 +94,10 @@ def draw_plane(win, x, y, plane, plane_dmg, vulnerable):
 
 def lives_counter(win, font, lives):
     """Процедура, при вызове которой отрисовывается текущее количество жизней
-        Аргументы:
-        win - окно отрисовки
-        font - шрифт
-        lives - переменная, отвечающая за количество жизней"""
+            Аргументы:
+            win - окно отрисовки
+            font - шрифт
+            lives - переменная, отвечающая за количество жизней"""
     lives_txt = font.render(lives * "*", True, (0, 137, 204))
     # yres_rec = yres_txt.get_rect()
     # yres_rec.center = (win_w / 2, win_h / 3 + 100 * scaling)

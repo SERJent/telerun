@@ -3,7 +3,7 @@ from constants import *
 
 
 class cloud():
-    def __init__(self, x , y, v, png):
+    def __init__(self, x, y, v, png):
         self.x = x
         self.y = y
         self.speed = v
@@ -16,19 +16,23 @@ class cloud():
         win.blit(self.png, (self.x, self.y))
 
 
-def clouds_init(clouds, clouds_img):  # создаёт начальный массив из облаков
-    for i in range(cld_n):
-        clouds.append(cloud(random.randrange(0, win_w, win_w/10), random.randrange(0, win_h, win_h/10),
-                            random.randrange(cld_v-1, cld_v+1), clouds_img[random.randint(0, 3)]))
+def clouds_run(win, clouds, clouds_img, counter_cloud):  # создает новые облака со случайной координатой и удаляет старые + отрисовка
+    res = False
+    if counter_cloud > cld_border_shift:
+        new_y = random.randrange(0, win_h, win_h / 10)
+        while len(clouds) > 0 and (clouds[-1].y - cld_h / 2 < new_y) and (new_y < clouds[-1].y + cld_h / 2):
+            new_y = random.randrange(0, win_h - cld_h, win_h / 2)
 
+        clouds.append(cloud(win_w, new_y, cld_v, clouds_img[random.randint(0, 3)]))
+        res = True
 
-def clouds_run(win, clouds, clouds_img):  # создает новые облака со случайной координатой и удаляет старые + отрисовка
     for cl in clouds:
         if (cl.x + cld_w) > 0:
             cl.shift()
         else:
             del clouds[clouds.index(cl)]
-            clouds.append(cloud(win_w, random.randrange(0, win_h, win_h/10), random.randrange(cld_v-1, cld_v+1),
-                                clouds_img[random.randint(0, 3)]))
+         
     for cld in clouds:
         cld.draw(win)
+
+    return res
