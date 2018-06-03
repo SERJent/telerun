@@ -100,6 +100,8 @@ while not crashed:
             menu = False
             game = True
             game_time = 0
+            bon.n_vpn = 1
+            bon.n_ext = 1
             clock.tick()
 
     if game:
@@ -177,6 +179,8 @@ while not crashed:
             game_over = False
             game = True
             game_time = 0
+            bon.n_vpn = 1
+            bon.n_ext = 1
             clock.tick()
 
         if keys[pg.K_BACKSPACE]:  # Выход в меню
