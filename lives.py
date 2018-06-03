@@ -15,16 +15,18 @@ import bonuses as bon
 
 
 def check_lives(y, pl_spdy, lives, vulnerable, polygon):
-    global t_vul
+    global t_vul, invulnerability_t
     if y > (win_h - brd) and vulnerable:
         pl_spdy = -rescue_spd
         lives = lives - 1
         vulnerable = False
+        invulnerability_t = invulnerability_t_damage
     for bull in bul.bullet_array:
         if bul.crossing(polygon, bull.x, bull.y, bull.rad) and vulnerable:
             lives = lives - 1
             del bul.bullet_array[bul.bullet_array.index(bull)]
             vulnerable = False
+            invulnerability_t = invulnerability_t_damage
     if not vulnerable:
         if y >= win_h:
             pl_spdy = -rescue_spd
@@ -37,10 +39,18 @@ def check_lives(y, pl_spdy, lives, vulnerable, polygon):
 
 
 def check_bonuses(lives, vulnerable, polygon):
-    for bonus in bon.list_of_bonuses:
+    global invulnerability_t
+    for bonus in bon.list_of_lives:
         if bul.crossing(polygon, bonus.x, bonus.y, bonus.rad) and vulnerable:
             lives = lives + 1
-            del bon.list_of_bonuses[bon.list_of_bonuses.index(bonus)]
+            del bon.list_of_lives[bon.list_of_lives.index(bonus)]
             vulnerable = True
+
+    for bonus in bon.list_of_vpn:
+        if bul.crossing(polygon, bonus.x, bonus.y, bonus.rad) and vulnerable:
+            vulnerable = False
+            del bon.list_of_vpn[bon.list_of_vpn.index(bonus)]
+            invulnerability_t = invulnerability_t_bonus
+
     return lives, vulnerable
 
